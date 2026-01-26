@@ -1,14 +1,18 @@
 [CmdletBinding()]
 param(
+	[Parameter(Mandatory=$False)]
 	[string]
 	$baseUrl = "https://portal.spp.org",	# default to download from portal.spp.org
 	
+	[Parameter(Mandatory=$False)]
 	[boolean]
-	$clobber = $True,						# default to clobber any file already stored on local disk
+	$clobber = $False,						# default to clobber any file already stored on local disk
 	
-	[int]									# default to a delay of 3 seconds between download requests
-	$baseDelay = 3,
+	[Parameter(Mandatory=$False)]
+	[int]									
+	$baseDelay = 5,							# default to a delay of 3 seconds between download requests
 	
+	[Parameter(Mandatory=$True)]
 	[string]
 	$baseDownloadPath
 )
@@ -111,7 +115,14 @@ function jitter_delay(){
 	, 0.7, 0.733
 	, 0.8, 0.8421
 	, 0.9, 0.9777
-	, 1.0
+	, 1.0, 1.115
+	, 2.1, 2.245
+	, 3.0, 3.425
+	, 4.2, 4.783
+	, 5.5, 5.69
+	, 6.7, 6.888
+	, 8.305, 8.803
+	, 9.0, 9.9
 	); 
 }
 
@@ -193,14 +204,13 @@ function main() {
 						<#
 							Is there anything to process? If no, restart the loop
 						#>
-						$found_file_count = ($listing.Content | Measure-Object).Count
+						$found_file_len = $listing.Content.length
 						$resp_status_code = $listing.StatusCode
 						
-						Write-Output "Count is ${found_file_count} and StatusCode is ${resp_status_code}"
-						
-						if (([int]$found_file_count -eq 0) -or ([int]$resp_status_code -ne 200)){
+						if (([int]$found_file_len -le 3) -or ([int]$resp_status_code -ne 200)){
 							Write-Warning "No files found for ${category},${dl_year},${dl_month}";
-							continue;
+							return;
+							
 						}else{
 							
 							<#
@@ -219,9 +229,8 @@ function main() {
 }
 
 # Run the script
-#main
+main
 
 Write-Output "BaseDownloadPath is ${baseDownloadPath}"
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
-
