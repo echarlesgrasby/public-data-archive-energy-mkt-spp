@@ -135,6 +135,15 @@ function build_folder_file_listing_url([string]$data_category_name, [string]$dow
 	return $download_url;
 }
 
+function build_file_download_url([string]$data_category_name, [string]$download_year, [string]$download_month, [string]$file_to_fetch){
+	<#
+		.SYNOPSIS
+			Takes in 4 string parameters and build a properly formatted Url () and return it to the caller
+	#>
+	$download_url = "${baseUrl}/file-browser-api/download/${data_category_name}?path=%2F${download_year}%2F${download_month}%2FBy_Day%2F${file_to_fetch}";
+	return $download_url;
+}
+
 function build_folder_file_listing([string]$download_url){
 	<#
 		.SYNOPSIS
@@ -163,14 +172,16 @@ function main() {
 		#sample folder listing Url --> https://portal.spp.org/file-browser-api/?fsName=da-lmp-by-bus&path=%2F2024%2F09%2FBy_Day&type=folder
 		#sample file download Url  --> https://portal.spp.org/file-browser-api/download/day-ahead-fuel-on-margin?path=%2F2026%2F01%2FDA-FUEL-ON-MARGIN-202601240100.csv
 		"day-ahead-market" = [ordered]@{
-								 "da-lmp-by-bus" = [ordered]@{"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2025" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2024" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2023" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2022" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2021" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2020" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   "2019" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+								 "da-lmp-by-bus" = [ordered]@{
+													"2026" = @("01")
+												   #"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2025" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2024" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2023" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2022" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2021" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2020" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+												   #"2019" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												};
 							  };
 	};
@@ -199,6 +210,14 @@ function main() {
 						
 						$listing = build_folder_file_listing -download_url $folder_file_listing_url;
 						
+						<#
+							Create archive path if it does not already exist
+						#>
+						$path_to_archive = "${baseDownloadPath}\${category}\${dl_year}\${dl_month}";
+						if (!(Test-Path $path_to_archive)){
+							New-Item -Type Directory $path_to_archive -Force
+						}
+						
 						Start-Sleep -Seconds $delaySeconds;
 						
 						<#
@@ -217,7 +236,12 @@ function main() {
 								Download each of the files, serially, from the result of the folder listing payload
 							#>
 							$listing.Content | ConvertFrom-Json | ForEach-Object {
-								$PSITEM
+								
+								foreach($obj in $PSITEM){
+									$filename_to_fetch = $obj.Name;
+									$fetchUrl = build_file_download_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month} -file_to_fetch ${filename_to_fetch}
+									Write-Output "				\-- File to fetch: ${fetchUrl}";
+								}
 							}
 						}
 						
@@ -228,9 +252,11 @@ function main() {
 	} <# Finish iterating through ${download_target} #>
 }
 
+Write-Output "Script execution began at $(Get-Date)";
+Write-Output "BaseDownloadPath is ${baseDownloadPath}"
+
 # Run the script
 main
 
-Write-Output "BaseDownloadPath is ${baseDownloadPath}"
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
