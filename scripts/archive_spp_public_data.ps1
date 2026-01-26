@@ -196,7 +196,7 @@ function main() {
 						$found_file_count = ($listing.Content | Measure-Object).Count
 						$resp_status_code = $listing.StatusCode
 						
-						Write-Output "Count is ${cnt} and StatusCode is ${sc}"
+						Write-Output "Count is ${found_file_count} and StatusCode is ${resp_status_code}"
 						
 						if (([int]$found_file_count -eq 0) -or ([int]$resp_status_code -ne 200)){
 							Write-Warning "No files found for ${category},${dl_year},${dl_month}";
@@ -224,3 +224,4 @@ function main() {
 Write-Output "BaseDownloadPath is ${baseDownloadPath}"
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
+
