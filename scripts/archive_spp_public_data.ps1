@@ -7,7 +7,10 @@ param(
 	$clobber = $True,						# default to clobber any file already stored on local disk
 	
 	[int]									# default to a delay of 3 seconds between download requests
-	$baseDelay = 3
+	$baseDelay = 3,
+	
+	[string]
+	$baseDownloadPath
 )
 <#
 
@@ -128,7 +131,7 @@ function build_folder_file_listing([string]$download_url){
 			process it into a POSH data structure, and return to the caller
 	#>
 	
-	$response = Invoke-WebRequest -Uri "${download_url}" -Method Get -UseBasicParsing | ConvertFrom-JSON;
+	$response = Invoke-WebRequest -Uri "${download_url}" -Method Get -UseBasicParsing;
 	return $response;
 }
 
@@ -142,13 +145,14 @@ function download_file([string]$src_path, [string]$tgt_path){
 function main() {
 	<#
 		.SYNOPSIS
-			"Main program"
+			Runs the main program and exits the script
 	#>
 	
-	$download_target = @{
+	$download_target = [ordered]@{
 		#sample folder listing Url --> https://portal.spp.org/file-browser-api/?fsName=da-lmp-by-bus&path=%2F2024%2F09%2FBy_Day&type=folder
 		#sample file download Url  --> https://portal.spp.org/file-browser-api/download/day-ahead-fuel-on-margin?path=%2F2026%2F01%2FDA-FUEL-ON-MARGIN-202601240100.csv
-		"day-ahead-market" = @{"da-lmp-by-bus" = [ordered]@{"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+		"day-ahead-market" = [ordered]@{
+								 "da-lmp-by-bus" = [ordered]@{"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2025" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2024" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2023" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
@@ -182,6 +186,31 @@ function main() {
 						$jt_delay = $jitter_delay;
 						$delaySeconds = $baseDelay + $jt_delay;
 						
+						$listing = build_folder_file_listing -download_url $folder_file_listing_url;
+						
+						Start-Sleep -Seconds $delaySeconds;
+						
+						<#
+							Is there anything to process? If no, restart the loop
+						#>
+						$found_file_count = ($listing.Content | Measure-Object).Count
+						$resp_status_code = $listing.StatusCode
+						
+						Write-Output "Count is ${cnt} and StatusCode is ${sc}"
+						
+						if (([int]$found_file_count -eq 0) -or ([int]$resp_status_code -ne 200)){
+							Write-Warning "No files found for ${category},${dl_year},${dl_month}";
+							continue;
+						}else{
+							
+							<#
+								Download each of the files, serially, from the result of the folder listing payload
+							#>
+							$listing.Content | ConvertFrom-Json | ForEach-Object {
+								$PSITEM
+							}
+						}
+						
 						Start-Sleep -Seconds $delaySeconds;
 				};
 			};
@@ -190,7 +219,8 @@ function main() {
 }
 
 # Run the script
-main
+#main
 
+Write-Output "BaseDownloadPath is ${baseDownloadPath}"
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
