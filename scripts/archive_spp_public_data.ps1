@@ -85,9 +85,6 @@ param(
 		TODO - Features to add to this script:
 		
 		- generate folder structure (ignore if already exists)
-		- write a DOWNLOAD.COMPLETE file in the main directory of each functional area.. this will allow the user to control which sections to download
-			from at a given time
-		- implement DOWNLOAD.COMPLETE check
 		- implement build_list_of_files_to_download
 		- download file
 		- check if file already exists
@@ -96,34 +93,43 @@ param(
 
 #>
 
-
-function write_control_file([string]$tgt_path){
-	<#
-		.SYNOPSIS
-			Write a DOWNLOAD.COMPLETE file to the root directory of any of the functional file groups (i.e. day-ahead-market\da-lmp-by-bus\).
-			This signals to the user that all relevant files on the web have been retrieved.
-			
-			Alternatively, the user can create this file themselves and it will instruct this program to skip performing any downloads
-			of that area of the source site.
-	#>
-	New-Item -Path ${tgt_path} -Name "DOWNLOAD.COMPLETE" -ItemType File -Verbose
-}
-
 function jitter_delay(){
 	<#
 		.SYNOPSIS
 			Return a "semi-random" offset to jitter the download delay
 	#>
-	return Get-Random @(0.1, 0.114, 0.2, 0.24, 0.3, 0.366, 0.4, 0.426, 0.5, 0.583, 0.6, 0.652, 0.7, 0.733, 0.8, 0.84210, 0.9, 0.9777, 1.0) 
+	return Get-Random @(
+	  0.1, 0.114
+	, 0.2, 0.24
+	, 0.3, 0.366
+	, 0.4, 0.426
+	, 0.5, 0.583
+	, 0.6, 0.652
+	, 0.7, 0.733
+	, 0.8, 0.8421
+	, 0.9, 0.9777
+	, 1.0
+	); 
 }
 
-function build_folder_listing_url([string]$data_category_name, [string]$download_year, [string]$download_month){
+function build_folder_file_listing_url([string]$data_category_name, [string]$download_year, [string]$download_month){
 	<#
 		.SYNOPSIS
 			Takes in 3 string parameters and build a properly formatted Url ([string]) and return it to the caller
 	#>
 	$download_url = "${baseUrl}/file-browser-api/?fsName=${data_category_name}&path=%2F${download_year}%2F${download_month}%2FBy_Day&type=folder";
 	return $download_url;
+}
+
+function build_folder_file_listing([string]$download_url){
+	<#
+		.SYNOPSIS
+			Takes in the payload from the GET request of a folder_file_listing_url ([string]), 
+			process it into a POSH data structure, and return to the caller
+	#>
+	
+	$response = Invoke-WebRequest -Uri "${download_url}" -Method Get -UseBasicParsing | ConvertFrom-JSON;
+	return $response;
 }
 
 function download_file([string]$src_path, [string]$tgt_path){
@@ -142,7 +148,7 @@ function main() {
 	$download_target = @{
 		#sample folder listing Url --> https://portal.spp.org/file-browser-api/?fsName=da-lmp-by-bus&path=%2F2024%2F09%2FBy_Day&type=folder
 		#sample file download Url  --> https://portal.spp.org/file-browser-api/download/day-ahead-fuel-on-margin?path=%2F2026%2F01%2FDA-FUEL-ON-MARGIN-202601240100.csv
-		"day-ahead-market" = @{"da-lmp-by-bus" = @{"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+		"day-ahead-market" = @{"da-lmp-by-bus" = [ordered]@{"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2025" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2024" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
 												   "2023" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
@@ -155,31 +161,36 @@ function main() {
 	};
 	
 	$download_target.GetEnumerator() | ForEach-Object {
-		$area = $_.Name
-		Write-Output "Processing files for ${area}"
+		$area = $_.Name;
+		Write-Output "Processing files for ${area}";
 		
 			$_.Value.GetEnumerator() | ForEach-Object {
-				$category = $_.Name
-				Write-Output "|--category: ${category}"
+				$category = $_.Name;
+				Write-Output "|--category: ${category}";
 				
 				$_.Value.GetEnumerator() | ForEach-Object {
-					$dl_year = $_.Name
-					Write-Output "|----year: ${dl_year}"
+					$dl_year = $_.Name;
+					Write-Output "	\--year: ${dl_year}";
 					
 					$_.Value.GetEnumerator() | ForEach-Object {
 						$dl_month = $_;
-						Write-Output "|------month: ${dl_month}";
+						Write-Output "		\--month: ${dl_month}";
+						
+						$folder_file_listing_url = build_folder_file_listing_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month};
+						Write-Output "			\-- Fetch from: ${folder_file_listing_url}";
+						
 						$jt_delay = $jitter_delay;
 						$delaySeconds = $baseDelay + $jt_delay;
+						
 						Start-Sleep -Seconds $delaySeconds;
-				}
-			}
-		}
-	} <# Finish iterating through ${download_target}#>
+				};
+			};
+		};
+	} <# Finish iterating through ${download_target} #>
 }
 
 # Run the script
 main
 
-Write-Output "`n-- --"
-Write-Output "Script completed at $(Get-Date)"
+Write-Output "`n-- --";
+Write-Output "Script completed at $(Get-Date)";
