@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "Public Data Archive Energy Market SPP"
+message: "Note that any data stored under the `/data` directory was archived (within accordance of the terms of use) from the Southwest Power Pool public data site. If you explicitly use any of the software scripts stored under the `/scripts` directory, please cite using the author names below. This archive purely exists to support the development of my PhD dissertation, which can be found at the following Github repository: https://github.com/echarlesgrasby/dissertation"
+type: data-archive
+
+authors:
+  - family-names: Grasby
+    given-names: Eric
+
+repository-code: "https://github.com/echarlesgrasby/public-data-archive-energy-mkt-spp"
+license: Unlicense
+
+references:
+  - type: dataset
+    title: "SPP Public Data"
+    author:
+      - name: "Southwest Power Pool, Inc."
+    url: "https://portal.spp.org/groups/integrated-marketplace"
+    notes: "Publicly available data accessed via the SPP Integrated Marketplace (https://portal.spp.org/groups/integrated-marketplace). Data ownership and terms remain with SPP. Reference the repository README.md file for further details."
