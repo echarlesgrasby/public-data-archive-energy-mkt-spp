@@ -2,19 +2,19 @@
 param(
 	[Parameter(Mandatory=$False)]
 	[string]
-	$baseUrl = "https://portal.spp.org",	# default to download from portal.spp.org
+	$baseUrl = "https://portal.spp.org",			# default to download from portal.spp.org
 	
 	[Parameter(Mandatory=$False)]
 	[boolean]
-	$clobber = $False,						# default to clobber any file already stored on local disk
+	$clobber = $False,								# default to clobber any file already stored on local disk
 	
 	[Parameter(Mandatory=$False)]
 	[int]									
-	$baseDelay = 5,							# default to a delay of 3 seconds between download requests
+	$baseDelay = 20,								# default to a delay of 3 seconds between download requests
 	
-	[Parameter(Mandatory=$True)]
+	[Parameter(Mandatory=$False)]
 	[string]
-	$baseDownloadPath
+	$baseDownloadPath = "D:\pub_data_archive"		# default to a folder on my local D: drive
 )
 <#
 
@@ -61,8 +61,8 @@ param(
 					
 	----------------------------------------------------------------------------------------------
 	
-		LICENSE
-				MIT License
+LICENSE
+				The Unlicense
 
 				Author 2026 Eric C. Grasby, MSIQ
 
@@ -95,42 +95,31 @@ param(
 #>
 
 
-<#
-		TODO - Features to add to this script:
-		
-		- generate folder structure (ignore if already exists)
-		- implement build_list_of_files_to_download
-		- download file
-		- check if file already exists
-		- boolean flag to clobber or ignore if file already exists
-		- serial rate limit (no threading, just one single thread with a random delay of 3 seconds or greater)
-
-#>
-
 function jitter_delay(){
 	<#
 		.SYNOPSIS
 			Return a "semi-random" offset to jitter the download delay
 	#>
-	return Get-Random @(
-	  0.1, 0.114
-	, 0.2, 0.24
-	, 0.3, 0.366
-	, 0.4, 0.426
-	, 0.5, 0.583
-	, 0.6, 0.652
-	, 0.7, 0.733
-	, 0.8, 0.8421
-	, 0.9, 0.9777
-	, 1.0, 1.115
-	, 2.1, 2.245
-	, 3.0, 3.425
-	, 4.2, 4.783
-	, 5.5, 5.69
-	, 6.7, 6.888
-	, 8.305, 8.803
-	, 9.0, 9.9
-	); 
+	
+	$x =  3, 5 `
+	, 4.2, 10.24 `
+	, 15.3, 9.366 `
+	, 10.4, 0.426 `
+	, 24.5, 10.583 `
+	, 20.6, 0.652 `
+	, 90.7, 10.733 `
+	, 50.8, 20.8421 `
+	, 12.9, 11.9777 `
+	, 71.0, 1.115 `
+	, 2.1, 25.245 `
+	, 34.0, 32.425 `
+	, 40.2, 4.783 `
+	, 5.5, 15.69 `
+	, 6.7, 60.888 `
+	, 58.305, 38.803 `
+	, 29.0, 39.9 | Get-Random
+
+    return $x
 }
 
 function build_folder_file_listing_url([string]$data_category_name, [string]$download_year, [string]$download_month){
@@ -151,6 +140,14 @@ function build_file_download_url([string]$data_category_name, [string]$download_
 	return $download_url;
 }
 
+function build_output_path([string]$areaName, [string]$data_category_name, [string]$download_year, [string]$download_month, [string]$file_to_fetch){
+	<#
+		.SYNOPSIS
+			Build the output path (on-disk) for where the downloaded file must be written to
+	#>
+	return "${baseDownloadPath}\${areaName}\${data_category_name}\${download_year}\${download_month}\${file_to_fetch}";
+}
+
 function build_folder_file_listing([string]$download_url){
 	<#
 		.SYNOPSIS
@@ -167,6 +164,27 @@ function download_file([string]$src_path, [string]$tgt_path){
 		.SYNOPSIS
 			Receives a Url and a local path. This downloads files from the remote path and writes it to local disk
 	#>
+	
+	# Add a separate delay, to ensure that we stay well within Terms of Use for downloading files
+	$j1 = jitter_delay;
+	$j2 = jitter_delay; 
+	$downloadDelay = ($baseDelay + $j1 + $j2);
+	Start-Sleep -Seconds $downloadDelay;
+	
+	if ($clobber){
+		if (Test-Path -Path $tgt_path){
+			Write-Warning "${tgt_path} already exists and the clobber flag is set. Skipping file."; 
+			return;
+		}
+	}
+	
+	# If we are not skipping the download, then perform the download.
+	try{
+		Invoke-WebRequest -Uri "${src_path}" -OutFile "${tgt_path}";
+		Write-Output "				\-- File written to: ${tgt_path}";
+	}catch{
+		Write-Error "Failed to fetch file - ${_}";
+	}
 }
 
 function main() {
@@ -176,8 +194,10 @@ function main() {
 	#>
 	
 	$download_target = [ordered]@{
+		
 		#sample folder listing Url --> https://portal.spp.org/file-browser-api/?fsName=da-lmp-by-bus&path=%2F2024%2F09%2FBy_Day&type=folder
 		#sample file download Url  --> https://portal.spp.org/file-browser-api/download/day-ahead-fuel-on-margin?path=%2F2026%2F01%2FDA-FUEL-ON-MARGIN-202601240100.csv
+		
 		"day-ahead-market" = [ordered]@{
 								 "da-lmp-by-bus" = [ordered]@{
 													"2026" = @("01")
@@ -212,15 +232,15 @@ function main() {
 						$folder_file_listing_url = build_folder_file_listing_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month};
 						Write-Output "			\-- Fetch from: ${folder_file_listing_url}";
 						
-						$jt_delay = $jitter_delay;
-						$delaySeconds = $baseDelay + $jt_delay;
+						$jt_delay = jitter_delay;
+						$delaySeconds = ($baseDelay + $jt_delay);
 						
 						$listing = build_folder_file_listing -download_url $folder_file_listing_url;
 						
 						<#
 							Create archive path if it does not already exist
 						#>
-						$path_to_archive = "${baseDownloadPath}\${category}\${dl_year}\${dl_month}";
+						$path_to_archive = "${baseDownloadPath}\${area}\${category}\${dl_year}\${dl_month}";
 						if (!(Test-Path $path_to_archive)){
 							New-Item -Type Directory $path_to_archive -Force
 						}
@@ -229,6 +249,8 @@ function main() {
 						
 						<#
 							Is there anything to process? If no, restart the loop
+							Note: It's interesting.. 'continue' does not behave the way that you would expect it to inside of ForEach-Object (not like it does inside an actual foreach loop)
+							'return' here actually behaves the way that we need it to.
 						#>
 						$found_file_len = $listing.Content.length
 						$resp_status_code = $listing.StatusCode
@@ -246,8 +268,12 @@ function main() {
 								
 								foreach($obj in $PSITEM){
 									$filename_to_fetch = $obj.Name;
-									$fetchUrl = build_file_download_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month} -file_to_fetch ${filename_to_fetch}
-									Write-Output "				\-- File to fetch: ${fetchUrl}";
+									$jt_delay = jitter_delay;
+									Start-Sleep -Seconds ($delaySeconds + $jt_delay);
+									$fetchUrl = build_file_download_url -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}";
+									Write-Output "				\-- File to fetch:   ${fetchUrl}";
+									$dwnl_path = build_output_path -areaName "${area}" -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}";
+									download_file -src_path "${fetchUrl}" -tgt_path "${dwnl_path}";
 								}
 							}
 						}
@@ -267,4 +293,3 @@ main
 
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
-
