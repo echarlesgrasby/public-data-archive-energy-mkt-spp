@@ -6,11 +6,11 @@ param(
 	
 	[Parameter(Mandatory=$False)]
 	[boolean]
-	$clobber = $False,								# default to clobber any file already stored on local disk
+	$clobber = $False,								# default to not clobber any file already stored on local disk
 	
 	[Parameter(Mandatory=$False)]
 	[int]									
-	$baseDelay = 20,								# default to a delay of 3 seconds between download requests
+	$baseDelay = 3,									# default to a delay of 3 seconds between download requests
 	
 	[Parameter(Mandatory=$False)]
 	[string]
@@ -107,36 +107,48 @@ function jitter_delay(){
 	, 10.4, 0.426 `
 	, 24.5, 10.583 `
 	, 20.6, 0.652 `
-	, 90.7, 10.733 `
-	, 50.8, 20.8421 `
+	, 30.7, 10.733 `
+	, 15.8, 20.8421 `
 	, 12.9, 11.9777 `
 	, 71.0, 1.115 `
 	, 2.1, 25.245 `
 	, 34.0, 32.425 `
 	, 40.2, 4.783 `
 	, 5.5, 15.69 `
-	, 6.7, 60.888 `
-	, 58.305, 38.803 `
-	, 29.0, 39.9 | Get-Random
+	, 6.7, 20.888 `
+	, 20.305, 20.803 `
+	, 20.0, 25.9 | Get-Random
 
     return $x
 }
 
-function build_folder_file_listing_url([string]$data_category_name, [string]$download_year, [string]$download_month){
+function build_folder_file_listing_url([string]$data_category_name, [string]$download_year, [string]$download_month, [switch]$byDay=$False){
 	<#
 		.SYNOPSIS
 			Takes in 3 string parameters and build a properly formatted Url ([string]) and return it to the caller
 	#>
-	$download_url = "${baseUrl}/file-browser-api/?fsName=${data_category_name}&path=%2F${download_year}%2F${download_month}%2FBy_Day&type=folder";
+	
+	if ($byDay){
+		$download_url = "${baseUrl}/file-browser-api/?fsName=${data_category_name}&path=%2F${download_year}%2F${download_month}%2FBy_Day&type=folder";
+	}else{
+		$download_url = "${baseUrl}/file-browser-api/?fsName=${data_category_name}&path=%2F${download_year}%2F${download_month}&type=folder";
+	}
+	
 	return $download_url;
 }
 
-function build_file_download_url([string]$data_category_name, [string]$download_year, [string]$download_month, [string]$file_to_fetch){
+function build_file_download_url([string]$data_category_name, [string]$download_year, [string]$download_month, [string]$file_to_fetch, [switch]$byDay){
 	<#
 		.SYNOPSIS
 			Takes in 4 string parameters and build a properly formatted Url () and return it to the caller
 	#>
-	$download_url = "${baseUrl}/file-browser-api/download/${data_category_name}?path=%2F${download_year}%2F${download_month}%2FBy_Day%2F${file_to_fetch}";
+    
+    if ($byDay){
+        $download_url = "${baseUrl}/file-browser-api/download/${data_category_name}?path=%2F${download_year}%2F${download_month}%2FBy_Day%2F${file_to_fetch}";
+    }else{
+        $download_url = "${baseUrl}/file-browser-api/download/${data_category_name}?path=%2F${download_year}%2F${download_month}%2F${file_to_fetch}";
+    }
+	
 	return $download_url;
 }
 
@@ -169,14 +181,16 @@ function download_file([string]$src_path, [string]$tgt_path){
 	$j1 = jitter_delay;
 	$j2 = jitter_delay; 
 	$downloadDelay = ($baseDelay + $j1 + $j2);
-	Start-Sleep -Seconds $downloadDelay;
 	
-	if ($clobber){
+	
+	if (! ${clobber}){
 		if (Test-Path -Path $tgt_path){
-			Write-Warning "${tgt_path} already exists and the clobber flag is set. Skipping file."; 
+			Write-Warning "${tgt_path} already exists and the clobber flag is not set. Skipping file download."; 
 			return;
 		}
 	}
+	
+	Start-Sleep -Seconds $downloadDelay;
 	
 	# If we are not skipping the download, then perform the download.
 	try{
@@ -195,22 +209,30 @@ function main() {
 	
 	$download_target = [ordered]@{
 		
-		#sample folder listing Url --> https://portal.spp.org/file-browser-api/?fsName=da-lmp-by-bus&path=%2F2024%2F09%2FBy_Day&type=folder
+		#sample folder listing Url --> gtxdh
 		#sample file download Url  --> https://portal.spp.org/file-browser-api/download/day-ahead-fuel-on-margin?path=%2F2026%2F01%2FDA-FUEL-ON-MARGIN-202601240100.csv
 		
 		"day-ahead-market" = [ordered]@{
-								 "da-lmp-by-bus" = [ordered]@{
-													"2026" = @("01")
-												   #"2026" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2025" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2024" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2023" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2022" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2021" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2020" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
-												   #"2019" = @("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+								 <#"da-lmp-by-bus" = [ordered]@{
+													"2026" = @("01");
 												};
-							  };
+								  
+								  "da-lmp-by-location" = [ordered]@{
+													"2026" = @("01");
+												};
+								  "market-clearing" = [ordered]@{
+													"2026" = @("01");
+												};
+								  "virtual-clearing-by-moa" = [ordered]@{
+													"2026" = @("01");
+												};
+                                   "day-ahead-fuel-on-margin" = [ordered]@{
+                                                    "2026" = @("01");
+                                                };#>
+                                    "da-binding-constraints" = [ordered]@{
+                                                    "2026" = @("01");
+                                                };
+									};
 	};
 	
 	$download_target.GetEnumerator() | ForEach-Object {
@@ -229,11 +251,12 @@ function main() {
 						$dl_month = $_;
 						Write-Output "		\--month: ${dl_month}";
 						
-						$folder_file_listing_url = build_folder_file_listing_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month};
+                        if ($category -in @("da-lmp-by-bus", "da-lmp-by-location", "da-binding-constraints")){
+                            $folder_file_listing_url = build_folder_file_listing_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month} -byDay;
+                        }else{
+                            $folder_file_listing_url = build_folder_file_listing_url -data_category_name ${category} -download_year ${dl_year} -download_month ${dl_month};
+                        }
 						Write-Output "			\-- Fetch from: ${folder_file_listing_url}";
-						
-						$jt_delay = jitter_delay;
-						$delaySeconds = ($baseDelay + $jt_delay);
 						
 						$listing = build_folder_file_listing -download_url $folder_file_listing_url;
 						
@@ -245,6 +268,8 @@ function main() {
 							New-Item -Type Directory $path_to_archive -Force
 						}
 						
+						$jt_delay = jitter_delay;
+						$delaySeconds = ($baseDelay + $jt_delay);
 						Start-Sleep -Seconds $delaySeconds;
 						
 						<#
@@ -268,9 +293,13 @@ function main() {
 								
 								foreach($obj in $PSITEM){
 									$filename_to_fetch = $obj.Name;
-									$jt_delay = jitter_delay;
-									Start-Sleep -Seconds ($delaySeconds + $jt_delay);
-									$fetchUrl = build_file_download_url -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}";
+
+                                    if ($category -in @("da-binding-constraints")){
+                                        $fetchUrl = build_file_download_url -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}" -byDay;
+                                    }else{
+                                        $fetchUrl = build_file_download_url -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}";
+                                    }
+
 									Write-Output "				\-- File to fetch:   ${fetchUrl}";
 									$dwnl_path = build_output_path -areaName "${area}" -data_category_name "${category}" -download_year "${dl_year}" -download_month "${dl_month}" -file_to_fetch "${filename_to_fetch}";
 									download_file -src_path "${fetchUrl}" -tgt_path "${dwnl_path}";
@@ -288,8 +317,13 @@ function main() {
 Write-Output "Script execution began at $(Get-Date)";
 Write-Output "BaseDownloadPath is ${baseDownloadPath}"
 
-# Run the script
-main
+$cont_resp = Read-Host "Press Y to continue"
+if ($cont_resp -ne "Y") {
+	Write-Output "Y not selected. Exiting script";
+}else{
+	# Run the script
+	main
+}
 
 Write-Output "`n-- --";
 Write-Output "Script completed at $(Get-Date)";
