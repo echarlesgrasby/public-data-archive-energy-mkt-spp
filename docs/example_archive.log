@@ -1,0 +1,127 @@
+Script execution began at 01/27/2026 18:12:10
+BaseDownloadPath is D:\pub_data_archive
+Press Y to continue: y
+Processing files for day-ahead-market
+|--category: market-clearing
+        \--year: 2026
+                \--month: 01
+                        \-- Fetch from: https://portal.spp.org/file-browser-api/?fsName=market-clearing&path=%2F2026%2F01&type=folder
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601010100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601010100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601020100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601020100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601030100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601030100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601040100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601040100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601050100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601050100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601060100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601060100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601070100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601070100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601080100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601080100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601090100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601090100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601100100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601100100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601110100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601110100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601120100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601120100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601130100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601130100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601140100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601140100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601150100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601150100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601160100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601160100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601170100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601170100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601180100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601180100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601190100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601190100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601200100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601200100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601210100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601210100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601220100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601220100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601230100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601230100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601240100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601240100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601250100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601250100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601260100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601260100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601270100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601270100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/market-clearing?path=%2F2026%2F01%2FDA-MC-202601280100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\market-clearing\2026\01\DA-MC-202601280100.csv
+|--category: virtual-clearing-by-moa
+        \--year: 2026
+                \--month: 01
+                        \-- Fetch from: https://portal.spp.org/file-browser-api/?fsName=virtual-clearing-by-moa&path=%2F2026%2F01&type=folder
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601010100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601010100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601020100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601020100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601030100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601030100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601040100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601040100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601050100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601050100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601060100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601060100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601070100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601070100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601080100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601080100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601090100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601090100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601100100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601100100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601110100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601110100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601120100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601120100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601130100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601130100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601140100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601140100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601150100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601150100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601160100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601160100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601170100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601170100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601180100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601180100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601190100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601190100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601200100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601200100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601210100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601210100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601220100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601220100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601230100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601230100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601240100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601240100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601250100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601250100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601260100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601260100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601270100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601270100.csv
+                                \-- File to fetch:   https://portal.spp.org/file-browser-api/download/virtual-clearing-by-moa?path=%2F2026%2F01%2FDA-VC-202601280100.csv
+                                \-- File written to: D:\pub_data_archive\day-ahead-market\virtual-clearing-by-moa\2026\01\DA-VC-202601280100.csv
+
+-- --
+Script completed at 01/27/2026 18:44:35
